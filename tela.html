@@ -3,21 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>To-Do List</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>To-do list</title>
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" type="imagex/png" href="icon.png">
 </head>
 <body>
-    <div class="container">
-        <h1>To-Do List</h1>
-        <input type="text" id="new-task" placeholder="Adicione uma nova tarefa">
-        <button onclick="addTask()">ADICIONAR</button>
-        <div class="filter-buttons">
-            <button onclick="filterTasks('all')">TODOS</button>
-            <button onclick="filterTasks('completed')">COMPLETO</button>
-            <button onclick="filterTasks('uncompleted')">INCOMPLETO</button>
+    <div class="gradiente-fundo">
+        <div class="box-to-do">
+            <h2>O que devo fazer? <img src="icon.png" alt="icone da lista"></h2>
+            <div class="coiso">
+                <input type="text" id="caixa-escreve" placeholder="Escreva aqui...">
+                <button onclick="addTask()">Adicionar</button>
+            </div>
+            <div class="filter-buttons">
+                <button onclick="filterTasks('all')">TODOS</button>
+                <button onclick="filterTasks('completed')">COMPLETO</button>
+                <button onclick="filterTasks('uncompleted')">INCOMPLETO</button>
+            </div>
+            <ul id="box-lista">
+                <!-- <li class="verificado">Tarefa 1</li>
+                <li>Tarefa 2</li>
+                <li>Tarefa 3</li> -->
+            </ul>
         </div>
-        <ul id="task-list"></ul>
     </div>
-    <script src="scripts.js"></script>
+<script src="script.js"></script>
 </body>
 </html>

@@ -1,93 +1,63 @@
-// Função para carregar tarefas do localStorage
-function loadTasks() {
-    const savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
-    savedTasks.forEach(task => {
-        addTaskToDOM(task.text, task.completed);
-    });
-}
+const caixaescreve = document.getElementById("caixa-escreve");
+const boxlista = document.getElementById("box-lista");
 
-// Função para salvar tarefas no localStorage
-function saveTasks() {
-    const tasks = [];
-    document.querySelectorAll('#task-list li').forEach(item => {
-        tasks.push({
-            text: item.firstChild.textContent,
-            completed: item.classList.contains('completed')
-        });
-    });
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-}
-
-// Função para adicionar tarefa ao DOM e ao localStorage
-function addTask() {
-    const taskInput = document.getElementById('new-task');
-    const taskText = taskInput.value.trim();
-
-    if (taskText !== '') {
-        addTaskToDOM(taskText);
-        saveTasks();
-        taskInput.value = '';
+function addTask(){
+    if(caixaescreve.value === ''){
+        alert("Você deve escrever algo primeiro");
+    } else {
+        let li = document.createElement("li");
+        li.innerHTML = caixaescreve.value;
+        boxlista.appendChild(li);
+        let span = document.createElement("span");
+        span.innerHTML = "\u00d7";
+        li.appendChild(span);
     }
+    caixaescreve.value = "";
+    SalvarInformações();
 }
 
-// Função para adicionar tarefa ao DOM
-function addTaskToDOM(taskText, completed = false) {
-    const taskList = document.getElementById('task-list');
-
-    const listItem = document.createElement('li');
-    if (completed) {
-        listItem.classList.add('completed');
+boxlista.addEventListener("click", function(e){
+    if(e.target.tagName === "LI"){
+        e.target.classList.toggle("verificado");
+        SalvarInformações();
+    } else if(e.target.tagName === "SPAN"){
+        e.target.parentElement.remove();
+        SalvarInformações();
     }
-    listItem.textContent = taskText;
+}, false);
 
-    const deleteButton = document.createElement('button');
-    deleteButton.textContent = 'Deletar';
-    deleteButton.onclick = function () {
-        taskList.removeChild(listItem);
-        saveTasks();
-    };
-
-    const editButton = document.createElement('button');
-    editButton.textContent = 'Editar';
-    editButton.onclick = function () {
-        const newTaskText = prompt('Editar tarefa:', taskText);
-        if (newTaskText) {
-            listItem.firstChild.textContent = newTaskText;
-            saveTasks();
-        }
-    };
-
-    listItem.addEventListener('click', function (event) {
-        if (event.target.tagName !== 'BUTTON') {
-            listItem.classList.toggle('completed');
-            saveTasks();
-        }
-    });
-
-    listItem.appendChild(editButton);
-    listItem.appendChild(deleteButton);
-    taskList.appendChild(listItem);
+function SalvarInformações(){
+    localStorage.setItem("data", boxlista.innerHTML);
 }
 
-// Função para filtrar as tarefas
+function MostrarTarefas(){
+    boxlista.innerHTML = localStorage.getItem("data");
+}
+
+MostrarTarefas();
+
 function filterTasks(filter) {
-    const tasks = document.querySelectorAll('#task-list li');
+    const tasks = document.querySelectorAll("#box-lista li");
+
     tasks.forEach(task => {
         switch (filter) {
-            case 'all':
-                task.style.display = '';
+            case "all":
+                task.style.display = "flex";
                 break;
-            case 'completed':
-                task.style.display = task.classList.contains('completed') ? '' : 'none';
+            case "completed":
+                if (task.classList.contains("verificado")) {
+                    task.style.display = "flex";
+                } else {
+                    task.style.display = "none";
+                }
                 break;
-            case 'uncompleted':
-                task.style.display = task.classList.contains('completed') ? 'none' : '';
+            case "uncompleted":
+                if (!task.classList.contains("verificado")) {
+                    task.style.display = "flex";
+                } else {
+                    task.style.display = "none";
+                }
                 break;
         }
     });
 }
-
-// Carrega as tarefas ao iniciar
-window.onload = function () {
-    loadTasks();
-};
